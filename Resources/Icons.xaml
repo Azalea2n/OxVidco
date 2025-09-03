@@ -1,0 +1,10 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- 
+        Ikon Aplikasi OxVidco (Konsep "Play-Ox")
+        Ini adalah ikon vektor yang dapat diskalakan dan digunakan di seluruh aplikasi.
+    -->
+    <Path x:Key="Icon.PlayOx" Data="M6,2 C7.5,2 9.5,3 10.5,4.5 C11.5,3 13.5,2 15,2 C18,2 20,4 20,7.5 C20,11.5 11,18 11,18 C11,18 2,11.5 2,7.5 C2,4 4,2 6,2 Z" />
+
+</ResourceDictionary>

@@ -1,0 +1,69 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net9.0-windows</TargetFramework>
+        <PlatformTarget>x64</PlatformTarget>
+        <LangVersion>preview</LangVersion>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <UseWPF>true</UseWPF>
+        <UseWindowsForms>true</UseWindowsForms>
+        <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+        <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+        <GenerateSatelliteAssembliesForCore>false</GenerateSatelliteAssembliesForCore>
+        <ApplicationIcon>Resources\Ox.ico</ApplicationIcon>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <Title>Video Converter 0x</Title>
+        <Authors>0xniel FT Azalea2n</Authors>
+        <NeutralLanguage>id-ID</NeutralLanguage>
+        <Description>Aplikasi konversi video yang ringan dan mudah digunakan, mendukung berbagai format video populer dengan kualitas tinggi.</Description>
+        <Copyright>© 2025 0xniel FT Azalea2n. All rights reserved.</Copyright>
+        <PackageTags>video converter, ffmpeg, video tools, mp4, avi, mkv, mov, wmv</PackageTags>
+        <PackageReleaseNotes>Rilis Awal (v1.0.0):
+        - Fitur konversi video ke berbagai format (MP4, AVI, MKV, MOV, WMV)
+        - Dukungan kualitas video yang dapat disesuaikan
+        - Antarmuka pengguna yang ramah dan mudah digunakan
+        - Dukungan drag and drop untuk file video
+        - Tampilan progress konversi yang informatif</PackageReleaseNotes>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+        <DebugType>portable</DebugType>
+        <DebugSymbols>true</DebugSymbols>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="FFmpeg.AutoGen" Version="7.1.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Resources\Images\" />
+      <Folder Include="Themes\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Page Update="Resources\Icons.xaml">
+        <Generator>MSBuild:Compile</Generator>
+      </Page>
+      <Page Update="MainWindow.xaml">
+        <Generator>MSBuild:Compile</Generator>
+      </Page>
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="ffmpeg\**">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
+    <Target Name="CopyFFmpeg" AfterTargets="Build">
+      <ItemGroup>
+        <FFmpegFiles Include="$(ProjectDir)ffmpeg\**\*" />
+      </ItemGroup>
+      <Copy SourceFiles="@(FFmpegFiles)" 
+            DestinationFiles="@(FFmpegFiles->'$(OutDir)%(RecursiveDir)%(Filename)%(Extension)')" 
+            SkipUnchangedFiles="true" />
+    </Target>
+
+</Project>
