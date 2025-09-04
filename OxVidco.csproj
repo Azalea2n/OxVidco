@@ -8,7 +8,7 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <UseWPF>true</UseWPF>
-        <UseWindowsForms>true</UseWindowsForms>
+        <EnableUnsafeBinaryFormatterSerialization>false</EnableUnsafeBinaryFormatterSerialization>
         <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
         <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
         <GenerateSatelliteAssembliesForCore>false</GenerateSatelliteAssembliesForCore>
@@ -18,7 +18,7 @@
         <Authors>0xniel FT Azalea2n</Authors>
         <NeutralLanguage>id-ID</NeutralLanguage>
         <Description>Aplikasi konversi video yang ringan dan mudah digunakan, mendukung berbagai format video populer dengan kualitas tinggi.</Description>
-        <Copyright>© 2025 0xniel FT Azalea2n. All rights reserved.</Copyright>
+        <Copyright> 2025 0xniel FT Azalea2n. All rights reserved.</Copyright>
         <PackageTags>video converter, ffmpeg, video tools, mp4, avi, mkv, mov, wmv</PackageTags>
         <PackageReleaseNotes>Rilis Awal (v1.0.0):
         - Fitur konversi video ke berbagai format (MP4, AVI, MKV, MOV, WMV)
@@ -42,7 +42,15 @@
         <DebugSymbols>true</DebugSymbols>
     </PropertyGroup>
 
+    <!-- Tambahkan konfigurasi untuk Release -->
+    <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+        <DebugType>none</DebugType>
+        <DebugSymbols>false</DebugSymbols>
+        <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
+    </PropertyGroup>
+
     <ItemGroup>
+        <FrameworkReference Include="Microsoft.WindowsDesktop.App.WindowsForms" />
         <None Include="Ox.png">
             <Pack>True</Pack>
             <PackagePath>\</PackagePath>
@@ -57,6 +65,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Installer\" />
       <Folder Include="Resources\Images\" />
       <Folder Include="Themes\" />
     </ItemGroup>
@@ -68,12 +77,6 @@
       <Page Update="MainWindow.xaml">
         <Generator>MSBuild:Compile</Generator>
       </Page>
-    </ItemGroup>
-
-    <ItemGroup>
-      <None Update="ffmpeg\**">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
     </ItemGroup>
 
     <ItemGroup>

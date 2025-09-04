@@ -1,0 +1,20 @@
+﻿INFORMASI PENTING SEBELUM INSTALASI
+
+Selamat datang di proses instalasi OxVidco!
+
+Sebelum melanjutkan, pastikan:
+
+1. Komputer Anda terhubung ke internet untuk pembaruan otomatis
+2. Tidak ada instance OxVidco yang sedang berjalan
+3. Ruang disk yang tersedia minimal 100MB
+4. Sistem Anda sudah terinstall .NET 9.0 atau yang lebih baru
+
+Persyaratan Sistem:
+- Windows 10/11 (64-bit)
+- .NET 9.0 Runtime
+- 4GB RAM (Rekomendasi 8GB)
+- Resolusi layar 1366x768 atau lebih tinggi
+
+Dengan melanjutkan instalasi, Anda menyetujui ketentuan penggunaan yang berlaku.
+
+Klik "Berikutnya" untuk melanjutkan instalasi.

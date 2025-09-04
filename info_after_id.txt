@@ -1,0 +1,15 @@
+﻿INSTALASI BERHASIL
+
+Terima kasih telah menginstal OxVidco!
+
+Apa yang bisa Anda lakukan selanjutnya?
+
+- Jalankan OxVidco sekarang
+- Kunjungi situs resmi kami untuk tutorial dan dukungan
+- Laporkan masalah atau berikan saran melalui GitHub
+
+Dukungan:
+- Email: 66keqing99@gmail.com
+- GitHub: https://github.com/Azalea2n/OxVidco/issues
+
+Terima kasih telah memilih OxVidco!

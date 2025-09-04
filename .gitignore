@@ -1,5 +1,114 @@
-bin/
-obj/
-/packages/
-riderModule.iml
-/_ReSharper.Caches/
+# JetBrains Rider
+.idea/
+*.sln.iml
+*.DotSettings
+*.DotSettings.user
+_ReSharper*/
+*.sln.ide/
+*.user
+*.userosscache
+*.suo
+*.userprefs
+*.sln.docstates
+*.ncrunchsolution
+*.ncrunchproject
+*.ncrunchproject.*
+*.ncrunch\.*
+*.ncrunch*.*
+*.ReSharper*
+*.[Rr]e[Ss]harper
+*.dotCover
+*.dotCover.*
+*.resharper*
+*_ReSharper*/
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Ww][Ii][Nn]32/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# Visual Studio 2015/2017 cache/options directory
+.vs/
+
+# MSTest test Results
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+
+# NUnit
+*.VisualState.xml
+TestResult.xml
+nunit-*.xml
+
+# .NET Core
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# Folder config file
+Desktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# Installer files
+*.msi
+*.msix
+*.msm
+*.msp
+
+# Windows shortcuts
+*.lnk
+
+# Packages
+*.nupkg
+*.nupkg.metadata
+
+# Build results
+*.exe
+*.dll
+*.pdb
+*.cache
+*.xml
+*.resources
+*.pch
+*.manifest
+*.exp
+*.lib
+*.dll.a
+*.dll.lib
+*.dll.manifest
+*.ilk
+*.meta
+*.obj
+*.tlb
+*.tli
+*.tlh
+*.tmp
+*.tmp_proj
+*.log
+*.vspscc
+*.vssscc
+.builds
+*.pidb
+*.svclog
+*.scc
+
+# Local History for Visual Studio
+.localhistory/
+
+# Fody - auto-generated XML schema
+FodyWeavers.xsd

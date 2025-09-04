@@ -9,7 +9,9 @@
             <!-- Converters -->
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
             <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
-        <converters:IndexInItemsControlConverter x:Key="IndexInItemsControl"/>
+            <converters:IndexInItemsControlConverter x:Key="IndexInItemsControl"/>
+            <converters:BoolToStringConverter x:Key="BoolToStringConverter"/>
+            <converters:BoolToColorConverter x:Key="BoolToColorConverter"/>
             
             <!-- Window Style -->
             <Style TargetType="Window">
@@ -19,14 +21,17 @@
                 <Setter Property="TextElement.Foreground" Value="#333333" />
             </Style>
 
-            <!-- Button Style -->
-            <Style TargetType="Button">
+            <!-- Button Styles -->
+            <Style x:Key="PrimaryButtonStyle" TargetType="Button">
                 <Setter Property="Background" Value="#2196F3" />
                 <Setter Property="Foreground" Value="White" />
-                <Setter Property="Padding" Value="12,8" />
+                <Setter Property="Padding" Value="16,8" />
+                <Setter Property="Margin" Value="0,0,0,10" />
                 <Setter Property="BorderThickness" Value="0" />
                 <Setter Property="Cursor" Value="Hand" />
                 <Setter Property="FontWeight" Value="500" />
+                <Setter Property="FontSize" Value="14" />
+                <Setter Property="HorizontalAlignment" Value="Center" />
                 <Style.Triggers>
                     <Trigger Property="IsMouseOver" Value="True">
                         <Setter Property="Background" Value="#1976D2" />
@@ -39,6 +44,8 @@
                     </Trigger>
                 </Style.Triggers>
             </Style>
+            
+            <Style TargetType="Button" BasedOn="{StaticResource PrimaryButtonStyle}" />
 
             <!-- Card Styles -->
             <Style x:Key="CardStyle" TargetType="Border">

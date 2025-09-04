@@ -6,7 +6,8 @@ using System.Windows;
 using System.Windows.Controls;
 using OxVidco.Commands;
 using OxVidco.Models;
-using WinForms = System.Windows.Forms;
+using Microsoft.Win32;
+using System.Windows.Forms;
 
 namespace OxVidco;
 
@@ -18,6 +19,7 @@ public class VideoFile : INotifyPropertyChanged
     private string _status = "Menunggu";
 
     private string _filePath = string.Empty;
+
     public string FilePath
     {
         get => _filePath;
@@ -32,7 +34,9 @@ public class VideoFile : INotifyPropertyChanged
 
     public string FileName => Path.GetFileName(FilePath);
     public string FileExtension => Path.GetExtension(FilePath).ToUpper().TrimStart('.');
-    public double FileSize => string.IsNullOrEmpty(FilePath) ? 0 : new FileInfo(FilePath).Length / (1024.0 * 1024.0); // Ukuran dalam MB
+
+    public double FileSize =>
+        string.IsNullOrEmpty(FilePath) ? 0 : new FileInfo(FilePath).Length / (1024.0 * 1024.0); // Ukuran dalam MB
 
     public string Status
     {
@@ -68,17 +72,17 @@ public static class FFmpegHelper
         {
             // Set path ke direktori FFmpeg
             var rootPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ffmpeg");
-            var libraryPath = Path.Combine(rootPath, "x64"); // Selalu gunakan x64 karena kita sudah set platform target ke x64
-                
+            var libraryPath =
+                Path.Combine(rootPath, "x64"); // Selalu gunakan x64 karena kita sudah set platform target ke x64
+
             // Set path ke executable FFmpeg
             _ffmpegPath = Path.Combine(libraryPath, "ffmpeg.exe");
-                
+
             // Verifikasi file FFmpeg ada
             if (!File.Exists(_ffmpegPath))
-            {
-                throw new FileNotFoundException("File FFmpeg tidak ditemukan. Pastikan FFmpeg sudah terinstall di folder yang benar.", _ffmpegPath);
-            }
-                
+                throw new FileNotFoundException(
+                    "File FFmpeg tidak ditemukan. Pastikan FFmpeg sudah terinstall di folder yang benar.", _ffmpegPath);
+
             _initialized = true;
         }
     }
@@ -87,7 +91,7 @@ public static class FFmpegHelper
     {
         if (!_initialized)
             throw new InvalidOperationException("FFmpeg belum diinisialisasi. Panggil Initialize() terlebih dahulu.");
-                
+
         return _ffmpegPath;
     }
 
@@ -101,7 +105,8 @@ public static class FFmpegHelper
                 StartInfo = new System.Diagnostics.ProcessStartInfo
                 {
                     FileName = ffprobePath,
-                    Arguments = $"-v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 \"{inputPath}\"",
+                    Arguments =
+                        $"-v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 \"{inputPath}\"",
                     UseShellExecute = false,
                     RedirectStandardOutput = true,
                     CreateNoWindow = true
@@ -109,13 +114,10 @@ public static class FFmpegHelper
             };
 
             process.Start();
-            string output = process.StandardOutput.ReadToEnd();
+            var output = process.StandardOutput.ReadToEnd();
             process.WaitForExit();
 
-            if (double.TryParse(output, out double seconds))
-            {
-                return TimeSpan.FromSeconds(seconds);
-            }
+            if (double.TryParse(output, out var seconds)) return TimeSpan.FromSeconds(seconds);
         }
         catch (Exception ex)
         {
@@ -125,7 +127,8 @@ public static class FFmpegHelper
         return TimeSpan.Zero;
     }
 
-    public static async Task<bool> ConvertVideoAsync(string inputPath, string outputPath, string format, int quality, IProgress<int>? progress = null, CancellationToken cancellationToken = default)
+    public static async Task<bool> ConvertVideoAsync(string inputPath, string outputPath, string format, int quality,
+        IProgress<int>? progress = null, CancellationToken cancellationToken = default)
     {
         try
         {
@@ -135,21 +138,18 @@ public static class FFmpegHelper
 
             // Pastikan direktori output ada
             var outputDir = Path.GetDirectoryName(outputPath);
-            if (!string.IsNullOrEmpty(outputDir) && !Directory.Exists(outputDir))
-            {
-                Directory.CreateDirectory(outputDir);
-            }
+            if (!string.IsNullOrEmpty(outputDir) && !Directory.Exists(outputDir)) Directory.CreateDirectory(outputDir);
 
             // Konfigurasi kualitas
-            string qualityPreset = quality switch
+            var qualityPreset = quality switch
             {
-                0 => "-preset slow -crf 18",     // Kualitas Tinggi
-                1 => "-preset medium -crf 23",   // Kualitas Standar
-                _ => "-preset fast -crf 28"      // Kualitas Rendah
+                0 => "-preset slow -crf 18", // Kualitas Tinggi
+                1 => "-preset medium -crf 23", // Kualitas Standar
+                _ => "-preset fast -crf 28" // Kualitas Rendah
             };
 
             // Format output
-            string formatArgs = format.ToLower() switch
+            var formatArgs = format.ToLower() switch
             {
                 "mp4" => "-c:v libx264 -c:a aac -movflags +faststart",
                 "avi" => "-c:v mpeg4 -c:a libmp3lame -q:v 2 -q:a 2",
@@ -160,7 +160,7 @@ public static class FFmpegHelper
             };
 
             // Build perintah FFmpeg
-            string args = $"-y -i \"{inputPath}\" {qualityPreset} {formatArgs} \"{outputPath}\"";
+            var args = $"-y -i \"{inputPath}\" {qualityPreset} {formatArgs} \"{outputPath}\"";
 
             // Dapatkan path ke FFmpeg
             var ffmpegPath = GetFFmpegPath();
@@ -182,20 +182,19 @@ public static class FFmpegHelper
 
             // Buat task completion source untuk menunggu proses selesai
             var tcs = new TaskCompletionSource<bool>();
-                
+
             // Handler untuk event output
             process.ErrorDataReceived += (_, e) =>
             {
                 if (!string.IsNullOrEmpty(e.Data))
-                {
                     // Parsing progress dari output FFmpeg
                     // Format: frame= 1234 fps= 23 q=28.0 size=    5120kB time=00:00:41.00 bitrate=1023.0kbits/s speed=0.767x
                     if (e.Data.Contains("time="))
-                    {
                         try
                         {
                             // Ambil bagian time=...
-                            var timeStr = e.Data.Substring(e.Data.IndexOf("time=", StringComparison.Ordinal) + 5, 11).Trim();
+                            var timeStr = e.Data.Substring(e.Data.IndexOf("time=", StringComparison.Ordinal) + 5, 11)
+                                .Trim();
                             if (TimeSpan.TryParse(timeStr, out var currentTime))
                             {
                                 // Dapatkan durasi video
@@ -203,7 +202,7 @@ public static class FFmpegHelper
                                 if (duration.TotalSeconds > 0)
                                 {
                                     // Hitung progress dalam persen
-                                    int percent = (int)((currentTime.TotalSeconds / duration.TotalSeconds) * 100);
+                                    var percent = (int)(currentTime.TotalSeconds / duration.TotalSeconds * 100);
                                     percent = Math.Clamp(percent, 0, 100);
                                     progress?.Report(percent);
                                 }
@@ -213,8 +212,6 @@ public static class FFmpegHelper
                         {
                             System.Diagnostics.Debug.WriteLine($"Error parsing progress: {ex.Message}");
                         }
-                    }
-                }
             };
 
             process.Exited += (_, _) =>
@@ -228,14 +225,11 @@ public static class FFmpegHelper
             process.BeginErrorReadLine();
 
             // Tunggu proses selesai atau dibatalkan
-            using (cancellationToken.Register(() => 
+            using (cancellationToken.Register(() =>
                    {
-                       try 
-                       { 
-                           if (!process.HasExited) 
-                           {
-                               process.Kill();
-                           }
+                       try
+                       {
+                           if (!process.HasExited) process.Kill();
                        }
                        catch (Exception ex) when (ex is InvalidOperationException || ex is Win32Exception)
                        {
@@ -279,7 +273,7 @@ public partial class MainWindow : INotifyPropertyChanged
             OnPropertyChanged();
         }
     }
-        
+
     public ObservableCollection<HelpItem> HelpItems
     {
         get => _helpItems;
@@ -296,6 +290,7 @@ public partial class MainWindow : INotifyPropertyChanged
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
+
     private bool _isProcessing;
 
     public MainWindow()
@@ -303,14 +298,14 @@ public partial class MainWindow : INotifyPropertyChanged
         InitializeComponent();
         VideoList.ItemsSource = _videoFiles;
         OutputFolderTextBox.Text = _outputFolder;
-            
+
         // Inisialisasi command
         new RelayCommand<string>(SearchHelp);
-            
+
         // Inisialisasi daftar fitur dan bantuan
         InitializeFeatureCards();
         InitializeHelpItems();
-            
+
         // Set data context
         DataContext = this;
     }
@@ -327,31 +322,26 @@ public partial class MainWindow : INotifyPropertyChanged
         };
 
         if (openFileDialog.ShowDialog() == true)
-        {
             foreach (var file in openFileDialog.FileNames)
-            {
                 if (!_videoFiles.Any(v => v.FilePath.Equals(file, StringComparison.OrdinalIgnoreCase)))
-                {
                     _videoFiles.Add(new VideoFile { FilePath = file });
-                }
-            }
-        }
     }
 
-    private void BrowseFolderButton_Click(object sender, RoutedEventArgs _)
+    private void BrowseFolderButton_Click(object sender, RoutedEventArgs e)
     {
         if (_isProcessing) return;
 
-        var dialog = new FolderBrowserDialog
+        using (var dialog = new FolderBrowserDialog())
         {
-            Description = "Pilih Folder Tujuan",
-            SelectedPath = _outputFolder
-        };
+            dialog.Description = "Pilih Folder Tujuan";
+            dialog.SelectedPath = _outputFolder;
+            dialog.UseDescriptionForTitle = true;
 
-        if (dialog.ShowDialog() == WinForms.DialogResult.OK)
-        {
-            _outputFolder = dialog.SelectedPath;
-            OutputFolderTextBox.Text = _outputFolder;
+            if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                _outputFolder = dialog.SelectedPath;
+                OutputFolderTextBox.Text = _outputFolder;
+            }
         }
     }
 
@@ -364,9 +354,9 @@ public partial class MainWindow : INotifyPropertyChanged
         _isProcessing = true;
         _cancellationTokenSource = new CancellationTokenSource();
         var cancellationToken = _cancellationTokenSource.Token;
-            
+
         UpdateUiState();
-            
+
         var format = (OutputFormatComboBox.SelectedItem as ComboBoxItem)?.Content.ToString()?.ToLower() ?? "mp4";
         var quality = QualityComboBox.SelectedIndex; // 0: Tinggi, 1: Standar, 2: Rendah
 
@@ -382,7 +372,7 @@ public partial class MainWindow : INotifyPropertyChanged
             });
         });
 
-        for (int i = 0; i < _videoFiles.Count; i++)
+        for (var i = 0; i < _videoFiles.Count; i++)
         {
             if (cancellationToken.IsCancellationRequested)
                 break;
@@ -394,11 +384,11 @@ public partial class MainWindow : INotifyPropertyChanged
             try
             {
                 // Buat nama file output
-                string outputFileName = Path.ChangeExtension(
-                    Path.GetFileNameWithoutExtension(video.FilePath), 
+                var outputFileName = Path.ChangeExtension(
+                    Path.GetFileNameWithoutExtension(video.FilePath),
                     $".{format.ToLower()}"
                 );
-                string outputPath = Path.Combine(_outputFolder, outputFileName);
+                var outputPath = Path.Combine(_outputFolder, outputFileName);
 
                 // Update status
                 var i1 = i;
@@ -409,8 +399,8 @@ public partial class MainWindow : INotifyPropertyChanged
                 });
 
                 // Lakukan konversi
-                bool success = await FFmpegHelper.ConvertVideoAsync(
-                    video.FilePath, 
+                var success = await FFmpegHelper.ConvertVideoAsync(
+                    video.FilePath,
                     outputPath,
                     format,
                     quality,
@@ -438,11 +428,11 @@ public partial class MainWindow : INotifyPropertyChanged
 
         _isProcessing = false;
         UpdateUiState();
-            
+
         if (!cancellationToken.IsCancellationRequested)
         {
             StatusText.Text = "Konversi selesai";
-            System.Windows.MessageBox.Show("Proses konversi selesai!", "Selesai", 
+            System.Windows.MessageBox.Show("Proses konversi selesai!", "Selesai",
                 MessageBoxButton.OK, MessageBoxImage.Information);
         }
         else
@@ -514,7 +504,8 @@ public partial class MainWindow : INotifyPropertyChanged
         {
             Id = "tip_quality",
             Title = "Kualitas Terbaik dengan Ukuran Minimal",
-            Description = "Gunakan format H.265 (HEVC) untuk mendapatkan kualitas yang lebih baik dengan ukuran file yang lebih kecil dibanding H.264.",
+            Description =
+                "Gunakan format H.265 (HEVC) untuk mendapatkan kualitas yang lebih baik dengan ukuran file yang lebih kecil dibanding H.264.",
             Icon = "VideoHighDefinition",
             Category = HelpItem.HelpCategory.Tips
         });
@@ -523,7 +514,8 @@ public partial class MainWindow : INotifyPropertyChanged
         {
             Id = "tip_batch",
             Title = "Konversi Banyak File Sekaligus",
-            Description = "Anda bisa menambahkan banyak file sekaligus dengan menekan Ctrl+A atau menyeret kursor untuk memilih beberapa file.",
+            Description =
+                "Anda bisa menambahkan banyak file sekaligus dengan menekan Ctrl+A atau menyeret kursor untuk memilih beberapa file.",
             Icon = "FileMultiple",
             Category = HelpItem.HelpCategory.Tips
         });
@@ -532,13 +524,15 @@ public partial class MainWindow : INotifyPropertyChanged
         _faqItems.Add(new FAQItem
         {
             Question = "Berapa ukuran maksimal file yang didukung?",
-            Answer = "Tidak ada batasan ukuran file. Aplikasi ini mendukung file berukuran besar, namun pastikan perangkat Anda memiliki ruang penyimpanan yang cukup."
+            Answer =
+                "Tidak ada batasan ukuran file. Aplikasi ini mendukung file berukuran besar, namun pastikan perangkat Anda memiliki ruang penyimpanan yang cukup."
         });
 
         _faqItems.Add(new FAQItem
         {
             Question = "Apakah kualitas video akan berkurang setelah dikonversi?",
-            Answer = "Kualitas video bisa berkurang tergantung pada format dan pengaturan kualitas yang Anda pilih. Gunakan preset kualitas yang lebih tinggi untuk meminimalkan penurunan kualitas."
+            Answer =
+                "Kualitas video bisa berkurang tergantung pada format dan pengaturan kualitas yang Anda pilih. Gunakan preset kualitas yang lebih tinggi untuk meminimalkan penurunan kualitas."
         });
     }
 
@@ -557,50 +551,44 @@ public partial class MainWindow : INotifyPropertyChanged
 
         // Cari di Panduan Dasar
         foreach (var item in _basicHelpItems)
-        {
             item.IsExpanded = item.Title.ToLower().Contains(searchQuery) ||
                               item.Description.ToLower().Contains(searchQuery) ||
                               string.Join(" ", item.Steps).ToLower().Contains(searchQuery);
-        }
 
         // Cari di Tips & Trik
         foreach (var item in _tipsItems)
-        {
             item.IsExpanded = item.Title.ToLower().Contains(searchQuery) ||
                               item.Description.ToLower().Contains(searchQuery);
-        }
 
         // Cari di FAQ
         foreach (var item in _faqItems)
-        {
             item.IsExpanded = item.Question.ToLower().Contains(searchQuery) ||
                               item.Answer.ToLower().Contains(searchQuery);
-        }
     }
 
     private void InitializeFeatureCards()
     {
         FeatureCards = new ObservableCollection<FeatureCard>
         {
-            new FeatureCard
+            new()
             {
                 Icon = "📁",
                 Title = "Multi Format",
                 Description = "Mendukung berbagai format video termasuk MP4, AVI, MKV, dan lebih banyak lagi"
             },
-            new FeatureCard
+            new()
             {
                 Icon = "⚡",
                 Title = "Cepat & Efisien",
                 Description = "Proses konversi yang cepat dengan kualitas terbaik"
             },
-            new FeatureCard
+            new()
             {
                 Icon = "🎯",
                 Title = "Kualitas Terjaga",
                 Description = "Hasil konversi dengan kualitas tinggi dan ukuran yang optimal"
             },
-            new FeatureCard
+            new()
             {
                 Icon = "🔒",
                 Title = "Aman & Privasi",
@@ -626,12 +614,12 @@ public partial class MainWindow : INotifyPropertyChanged
     private void CancelButton_Click(object sender, RoutedEventArgs e)
     {
         if (!_isProcessing || _cancellationTokenSource == null) return;
-            
-        var result = System.Windows.MessageBox.Show("Apakah Anda yakin ingin membatalkan proses konversi?", 
-            "Konfirmasi Pembatalan", 
-            MessageBoxButton.YesNo, 
+
+        var result = System.Windows.MessageBox.Show("Apakah Anda yakin ingin membatalkan proses konversi?",
+            "Konfirmasi Pembatalan",
+            MessageBoxButton.YesNo,
             MessageBoxImage.Question);
-                
+
         if (result == MessageBoxResult.Yes)
         {
             _cancellationTokenSource.Cancel();
