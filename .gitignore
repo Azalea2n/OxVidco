@@ -112,3 +112,8 @@ $RECYCLE.BIN/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# FFmpeg binaries
+ffmpeg/x64/ffmpeg.exe
+ffmpeg/x64/ffplay.exe
+ffmpeg/x64/ffprobe.exe
