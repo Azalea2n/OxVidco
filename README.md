@@ -32,6 +32,4 @@ Proyek ini dilisensikan di bawah [MIT License](LICENSE).
 
 Kontribusi selalu diterima! Silakan buka issue atau pull request untuk saran dan perbaikan.
 
-## Tentang
-
 Dikembangkan oleh [0xniel FT Azalea2n](https://github.com/Azalea2n)
