@@ -1,0 +1,48 @@
+# Workflow untuk membangun dan menguji proyek .NET
+# Dokumentasi resmi: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: .NET CI
+
+on:
+  push:
+    branches: [ "ilosther" ]
+  pull_request:
+    branches: [ "ilosther" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build and Test
+    runs-on: windows-latest  # Menggunakan Windows karena ini adalah aplikasi WPF
+    
+    steps:
+    - name: Checkout kode
+      uses: actions/checkout@v4
+      
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '9.0.x'  # Sesuaikan dengan versi .NET yang digunakan
+        
+    - name: Restore dependencies
+      run: dotnet restore
+      
+    - name: Build
+      run: dotnet build --no-restore --configuration Release
+      
+    - name: Test
+      run: dotnet test --no-build --verbosity normal
+      
+    - name: Create artifacts
+      if: success()
+      run: |
+        mkdir -p artifacts
+        dotnet publish -c Release -o ./artifacts --no-build
+      
+    - name: Upload artifacts
+      if: success()
+      uses: actions/upload-artifact@v4
+      with:
+        name: oxvidco-build
+        path: ./artifacts/**/*
+        retention-days: 5
