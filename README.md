@@ -1,5 +1,10 @@
 <div align="center">
   <h1>OxVidco</h1>
+  
+  [![.NET CI](https://github.com/Azalea2n/OxVidco/actions/workflows/dotnet.yml/badge.svg?branch=ilosther)](https://github.com/Azalea2n/OxVidco/actions/workflows/dotnet.yml)
+  [![Lisensi: MIT](https://img.shields.io/badge/Lisensi-MIT-yellow.svg)](LICENSE)
+  [![.NET](https://img.shields.io/badge/.NET-9.0-blueviolet)](https://dotnet.microsoft.com/download/dotnet/9.0)
+  ![Platform](https://img.shields.io/badge/Platform-Windows-0078d7.svg)
   <p>Aplikasi konversi video yang ringan dan mudah digunakan, mendukung berbagai format video populer dengan kualitas tinggi.</p>
   
   [![Lisensi: MIT](https://img.shields.io/badge/Lisensi-MIT-yellow.svg)](LICENSE)
