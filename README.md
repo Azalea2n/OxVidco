@@ -6,6 +6,12 @@
   [![.NET](https://img.shields.io/badge/.NET-9.0-blueviolet)](https://dotnet.microsoft.com/download/dotnet/9.0)
   ![Platform](https://img.shields.io/badge/Platform-Windows-0078d7.svg)
   <p>Aplikasi konversi video yang ringan dan mudah digunakan, mendukung berbagai format video populer dengan kualitas tinggi.</p>
+  
+  ![Topik](https://img.shields.io/badge/video-converter-ff69b4.svg)
+  ![Topik](https://img.shields.io/badge/ffmpeg-5.1.2-green.svg)
+  ![Topik](https://img.shields.io/badge/desktop-app-9cf.svg)
+  ![Topik](https://img.shields.io/badge/multimedia-tool-orange.svg)
+  ![Topik](https://img.shields.io/badge/cross--platform-important.svg)
 
   ![Screenshot Aplikasi](Screenshot.png)
 </div>
