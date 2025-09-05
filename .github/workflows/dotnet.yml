@@ -37,7 +37,7 @@ jobs:
       if: success()
       run: |
         mkdir -p artifacts
-        dotnet publish ./OxVidco/OxVidco.csproj -c Release -o ./artifacts --no-restore --no-build
+        dotnet publish -c Release -o ./artifacts --no-restore --no-build
       
     - name: Upload artifacts
       if: success()
