@@ -6,10 +6,6 @@
   [![.NET](https://img.shields.io/badge/.NET-9.0-blueviolet)](https://dotnet.microsoft.com/download/dotnet/9.0)
   ![Platform](https://img.shields.io/badge/Platform-Windows-0078d7.svg)
   <p>Aplikasi konversi video yang ringan dan mudah digunakan, mendukung berbagai format video populer dengan kualitas tinggi.</p>
-  
-  [![Lisensi: MIT](https://img.shields.io/badge/Lisensi-MIT-yellow.svg)](LICENSE)
-  [![Versi](https://img.shields.io/badge/Versi-1.0.1-blue.svg)](https://github.com/Azalea2n/OxVidco/releases)
-  [.NET](https://dotnet.microsoft.com/download/dotnet/9.0)
 
   ![Screenshot Aplikasi](Screenshot.png)
 </div>
