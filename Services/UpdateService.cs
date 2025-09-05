@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using Newtonsoft.Json;
 using OxVidco.Models;
-using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics;
 using HtmlAgilityPack;
 using System.IO;
 using System.Net;
@@ -39,18 +39,43 @@ namespace OxVidco.Services
         {
             try
             {
-                // Langsung coba download file
-                var json = await DownloadFileFromGoogleDrive(UpdateFileId);
-                if (string.IsNullOrEmpty(json))
-                    return null;
+                // Coba baca dari file lokal terlebih dahulu
+                var localJsonPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "update.json");
+                if (File.Exists(localJsonPath))
+                {
+                    var json = await File.ReadAllTextAsync(localJsonPath);
+                    if (!string.IsNullOrEmpty(json))
+                    {
+                        var updateInfo = JsonConvert.DeserializeObject<UpdateInfo>(json);
+                        return updateInfo?.Version != null && updateInfo.Version > currentVersion ? updateInfo : null;
+                    }
+                }
 
-                var updateInfo = JsonConvert.DeserializeObject<UpdateInfo>(json);
-                return updateInfo?.Version != null && updateInfo.Version > currentVersion ? updateInfo : null;
+                // Jika tidak ada file lokal, coba download dari Google Drive
+                // Hanya jika UpdateFileId sudah diatur dengan benar
+                if (!string.IsNullOrEmpty(UpdateFileId) && UpdateFileId != "YOUR_GOOGLE_DRIVE_FILE_ID")
+                {
+                    try 
+                    {
+                        var json = await DownloadFileFromGoogleDrive(UpdateFileId);
+                        if (!string.IsNullOrEmpty(json))
+                        {
+                            var updateInfo = JsonConvert.DeserializeObject<UpdateInfo>(json);
+                            return updateInfo?.Version != null && updateInfo.Version > currentVersion ? updateInfo : null;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine($"Gagal memeriksa pembaruan dari Google Drive: {ex.Message}");
+                    }
+                }
+
+                return null;
             }
             catch (Exception ex)
             {
                 // Log error
-                Console.WriteLine($"Error checking for updates: {ex.Message}");
+                Debug.WriteLine($"Error checking for updates: {ex.Message}");
                 return null;
             }
         }

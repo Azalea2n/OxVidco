@@ -188,7 +188,7 @@
                                    FontSize="14"
                                    Foreground="#666"
                                    HorizontalAlignment="Center" />
-                        <TextBlock Text="v1.0.0"
+                        <TextBlock Text="v1.0.1"
                                    FontSize="12"
                                    Foreground="#999"
                                    HorizontalAlignment="Center"
@@ -240,6 +240,43 @@
                             Dengan antarmuka yang intuitif dan fitur yang lengkap, aplikasi ini cocok untuk berbagai kebutuhan konversi video Anda.
                         </TextBlock>
 
+                        <TextBlock Text="Kredit"
+                                   FontSize="18"
+                                   FontWeight="SemiBold"
+                                   Margin="0,20,0,15" />
+                        
+                        <StackPanel Margin="0,0,0,20">
+                            <TextBlock Text="Pengembang Utama"
+                                       FontWeight="SemiBold"
+                                       Margin="0,0,0,5" />
+                            <TextBlock Text="• 0xniel FT Azalea2n - Pengembang Utama"
+                                       Margin="15,0,0,5" />
+                            
+                            <TextBlock Text="Libraries &amp; Framework"
+                                       FontWeight="SemiBold"
+                                       Margin="0,15,0,5" />
+                            <TextBlock Text="• .NET 9.0 - Platform pengembangan"
+                                       Margin="15,0,0,2" />
+                            <TextBlock Text="• FFmpeg - Engine konversi video"
+                                       Margin="15,0,0,2" />
+                            <TextBlock Text="• Newtonsoft.Json - Pemrosesan JSON"
+                                       Margin="15,0,0,2" />
+                            <TextBlock Text="• HtmlAgilityPack - Parser HTML"
+                                       Margin="15,0,0,2" />
+                                       
+                            <TextBlock Text="Desain &amp; Ikon"
+                                       FontWeight="SemiBold"
+                                       Margin="0,15,0,5" />
+                            <TextBlock Text="• Material Design Icons - Ikon antarmuka"
+                                       Margin="15,0,0,2" />
+                            <TextBlock Text="• Fluent UI - Komponen antarmuka"
+                                       Margin="15,0,0,2" />
+                        </StackPanel>
+                        
+                        <TextBlock Text="Hak Cipta © 2025 0xniel FT Azalea2n. Semua hak dilindungi."
+                                   FontSize="12"
+                                   Foreground="#666"
+                                   Margin="0,20,0,0" />
                     </StackPanel>
 
                     <!-- Footer -->

@@ -143,7 +143,7 @@ namespace OxVidco.ViewModels
             catch (Exception ex)
             {
                 Debug.WriteLine($"Error getting version: {ex}");
-                return "1.0.0"; // Nilai default jika terjadi error
+                return "1.0.1"; // Nilai default jika terjadi error
             }
         }
 
