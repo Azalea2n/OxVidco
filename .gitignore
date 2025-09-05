@@ -1,3 +1,8 @@
+# NuGet Packages
+*.nupkg
+*.snupkg
+packages/
+
 # JetBrains Rider
 .idea/
 *.sln.iml
