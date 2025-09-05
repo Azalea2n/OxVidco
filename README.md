@@ -117,5 +117,5 @@ Proyek ini dilisensikan di bawah Lisensi MIT - lihat file [LICENSE](LICENSE) unt
 ---
 
 <div align="center">
-  Dibuat dengan ❤️ oleh <a href="https://github.com/Azalea2n">Azalea2n</a>
+  Dibuat oleh <a href="https://github.com/Azalea2n">Azalea2n</a>
 </div>
