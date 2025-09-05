@@ -33,11 +33,11 @@ jobs:
     - name: Test
       run: dotnet test --no-build --verbosity normal
       
-    - name: Create artifacts
+    - name: Publish application
       if: success()
       run: |
         mkdir -p artifacts
-        dotnet publish -c Release -o ./artifacts --no-build
+        dotnet publish ./OxVidco/OxVidco.csproj -c Release -o ./artifacts --no-restore --no-build
       
     - name: Upload artifacts
       if: success()
