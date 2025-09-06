@@ -25,15 +25,22 @@
         - Dukungan kualitas video yang dapat disesuaikan
         - Antarmuka pengguna yang ramah dan mudah digunakan
         - Dukungan drag and drop untuk file video
-        - Tampilan progress konversi yang informatif</PackageReleaseNotes>
+        - Tampilan progress konversi yang informatif
+        
+Rilis v1.0.1:
+        - Perbaikan sistem pembaruan otomatis
+        - Perbaikan dependensi eksternal
+        
+Rilis v1.0.2:
+        - Pembaruan versi proyek</PackageReleaseNotes>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageIcon>Ox.png</PackageIcon>
-        <Version>1.0.1</Version>
+        <Version>1.0.2</Version>
         <RepositoryUrl>https://github.com/Azalea2n/OxVidco</RepositoryUrl>
         <Company>0xCo</Company>
-        <AssemblyVersion>1.0.1.0</AssemblyVersion>
-        <FileVersion>1.0.1.0</FileVersion>
+        <AssemblyVersion>1.0.2.0</AssemblyVersion>
+        <FileVersion>1.0.2.0</FileVersion>
         <SignAssembly>true</SignAssembly>
         <AssemblyOriginatorKeyFile>oxvidco.snk</AssemblyOriginatorKeyFile>
     </PropertyGroup>
@@ -93,13 +100,43 @@
       </Content>
     </ItemGroup>
 
+    <!-- Hapus folder x64 yang tidak diperlukan -->
+    <Target Name="CleanDuplicateFFmpeg" AfterTargets="Build">
+        <Message Importance="high" Text="Membersihkan duplikasi file FFmpeg..." />
+        <RemoveDir Directories="$(OutDir)x64" />
+    </Target>
+
     <Target Name="CopyFFmpeg" AfterTargets="Build">
-      <ItemGroup>
-        <FFmpegFiles Include="$(ProjectDir)ffmpeg\**\*" />
-      </ItemGroup>
-      <Copy SourceFiles="@(FFmpegFiles)" 
-            DestinationFiles="@(FFmpegFiles->'$(OutDir)%(RecursiveDir)%(Filename)%(Extension)')" 
-            SkipUnchangedFiles="true" />
+        <Message Importance="high" Text="Menyalin file FFmpeg..." />
+        
+        <!-- Pastikan direktori tujuan ada -->
+        <MakeDir Directories="$(OutDir)ffmpeg\x64" />
+        
+        <!-- Salin file-file FFmpeg -->
+        <Copy SourceFiles="$(ProjectDir)ffmpeg\x64\ffmpeg.exe" 
+              DestinationFolder="$(OutDir)ffmpeg\x64" 
+              SkipUnchangedFiles="true"
+              OverwriteReadOnlyFiles="true"
+              Retries="3"
+              RetryDelayMilliseconds="1000" />
+              
+        <!-- Hanya salin ffplay.exe jika ada di direktori sumber -->
+        <Copy SourceFiles="$(ProjectDir)ffmpeg\x64\ffplay.exe" 
+              DestinationFolder="$(OutDir)ffmpeg\x64" 
+              SkipUnchangedFiles="true"
+              OverwriteReadOnlyFiles="true"
+              Retries="3"
+              RetryDelayMilliseconds="1000"
+              Condition="Exists('$(ProjectDir)ffmpeg\x64\ffplay.exe')" />
+              
+        <Copy SourceFiles="$(ProjectDir)ffmpeg\x64\ffprobe.exe" 
+              DestinationFolder="$(OutDir)ffmpeg\x64" 
+              SkipUnchangedFiles="true"
+              OverwriteReadOnlyFiles="true"
+              Retries="3"
+              RetryDelayMilliseconds="1000" />
+              
+        <Message Importance="high" Text="File FFmpeg berhasil disalin ke: $(OutDir)ffmpeg\x64\" />
     </Target>
 
     <Target Name="CopyNewtonsoftJson" AfterTargets="Build">

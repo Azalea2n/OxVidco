@@ -148,15 +148,65 @@ public static class FFmpegHelper
                 _ => "-preset fast -crf 28" // Kualitas Rendah
             };
 
-            // Format output
+            // Format output dengan pengaturan optimal untuk setiap format
             var formatArgs = format.ToLower() switch
             {
-                "mp4" => "-c:v libx264 -c:a aac -movflags +faststart",
-                "avi" => "-c:v mpeg4 -c:a libmp3lame -q:v 2 -q:a 2",
+                // MP4 (H.264 + AAC) - Format standar kompatibilitas luas
+                "mp4" => "-c:v libx264 -profile:v high -level 4.0 -pix_fmt yuv420p -movflags +faststart -c:a aac -b:a 192k",
+                
+                // AVI (MPEG-4 + MP3)
+                "avi" => "-c:v mpeg4 -vtag xvid -qscale:v 3 -c:a libmp3lame -qscale:a 2",
+                
+                // MKV (H.264 + AAC) - Format container yang fleksibel
                 "mkv" => "-c:v libx264 -c:a aac -f matroska",
-                "mov" => "-c:v libx264 -c:a aac -f mov",
-                "wmv" => "-c:v wmv2 -c:a wmav2",
-                _ => "-c:v libx264 -c:a aac"
+                
+                // MOV (H.264 + AAC) - Format Apple
+                "mov" => "-c:v libx264 -profile:v high -level 4.0 -pix_fmt yuv420p -c:a aac -f mov",
+                
+                // WMV (Windows Media Video)
+                "wmv" => "-c:v wmv2 -b:v 2M -c:a wmav2 -b:a 192k",
+                
+                // WebM (VP9 + Opus) - Format web modern
+                "webm" => "-c:v libvpx-vp9 -crf 30 -b:v 1M -c:a libopus -b:a 128k -f webm",
+                
+                // FLV (H.264 + AAC) - Format Flash Video
+                "flv" => "-c:v libx264 -c:a aac -f flv",
+                
+                // M4V (H.264 + AAC) - Format iTunes
+                "m4v" => "-c:v libx264 -profile:v high -level 4.0 -pix_fmt yuv420p -c:a aac -f mp4 -movflags +faststart",
+                
+                // 3GP (H.264 + AMR-NB) - Format ponsel lama
+                "3gp" => "-c:v libx264 -profile:v baseline -level 1.3 -pix_fmt yuv420p -c:a libopencore_amrnb -ar 8000 -ab 12.2k",
+                
+                // VOB (MPEG-2 + AC3) - Format DVD
+                "vob" => "-c:v mpeg2video -qscale:v 3 -c:a ac3 -b:a 192k -f vob -target ntsc-dvd",
+                
+                // TS (MPEG-2 Transport Stream)
+                "ts" => "-c:v mpeg2video -b:v 5M -c:a mp2 -f mpegts",
+                
+                // M2TS/MTS (AVCHD)
+                "m2ts" or "mts" => "-c:v libx264 -profile:v high -level 4.1 -pix_fmt yuv420p -c:a aac -f mpegts",
+                
+                // OGV (Theora + Vorbis) - Format terbuka
+                "ogv" => "-c:v libtheora -qscale:v 7 -c:a libvorbis -qscale:a 5 -f ogg",
+                
+                // ASF (Windows Media)
+                "asf" => "-c:v wmv2 -b:v 2M -c:a wmav2 -b:a 192k -f asf",
+                
+                // F4V (H.264 + AAC) - Format Flash Video modern
+                "f4v" => "-c:v libx264 -profile:v high -level 4.0 -pix_fmt yuv420p -c:a aac -f flv",
+                
+                // RM/RMVB (RealMedia) - Format RealPlayer
+                "rm" or "rmvb" => "-c:v libx264 -c:a libmp3lame -f flv", // RealMedia memerlukan codec khusus, ini alternatif
+                
+                // DIVX (MPEG-4 ASP)
+                "divx" => "-c:v mpeg4 -vtag xvid -qscale:v 3 -c:a libmp3lame -qscale:a 2",
+                
+                // MPG/MPEG (MPEG-1/2)
+                "mpg" or "mpeg" => "-c:v mpeg2video -qscale:v 3 -c:a mp2 -f mpeg",
+                
+                // Default: Gunakan H.264 + AAC untuk format yang tidak dikenal
+                _ => "-c:v libx264 -profile:v high -level 4.0 -pix_fmt yuv420p -c:a aac -movflags +faststart"
             };
 
             // Build perintah FFmpeg

@@ -1,7 +1,7 @@
 {
-  "version": "1.0.1",
+  "version": "1.0.2",
   "downloadUrl": "https://drive.google.com/uc?export=download&id=FILE_ID_INSTALLER",
-  "changelog": "Pembaruan versi 1.0.1\n- Perbaikan sistem pembaruan otomatis\n- Perbaikan dependensi eksternal",
+  "changelog": "Pembaruan versi 1.0.2\n- Pembaruan versi proyek",
   "isMandatory": false,
   "releaseDate": "2025-09-05T10:10:00+07:00"
 }
