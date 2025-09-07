@@ -43,10 +43,12 @@
         <!-- Tab Konversi Video -->
         <TabItem Header="Konversi Video">
             <Grid Margin="5">
+                <Grid.Background>
+                    <ImageBrush ImageSource="/C.jpeg" Opacity="0.5"/>
+                </Grid.Background>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
-                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
@@ -54,114 +56,104 @@
                 <!-- Header -->
                 <TextBlock Grid.Row="0" Text="OxVidco"
                            FontSize="24" FontWeight="Bold"
-                           Margin="0,0,0,20"
-                           HorizontalAlignment="Center" />
+                           Margin="10,10,0,0" FontFamily="Alien Encounters" HorizontalAlignment="Left" />
 
-                <!-- File List -->
-                <GroupBox Grid.Row="1" Header="Daftar Video" Margin="0,0,0,10">
-                    <Grid>
-                        <ListView x:Name="VideoList" Margin="5">
+                <!-- Konten Utama -->
+                <Grid Grid.Row="1">
+                    <Grid.Background>
+                        <ImageBrush/>
+                    </Grid.Background>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <!-- File List -->
+                    <GroupBox Grid.Column="0" Header="Daftar Video" Margin="5">
+                        <ListView x:Name="VideoList" SelectionChanged="VideoList_SelectionChanged" d:ItemsSource="{d:SampleData ItemCount=5}" Background="{x:Null}">
                             <ListView.View>
-                                <!--
-                                Display a list of video files with their information.
-                                
-                                Columns:
-                                    - Nama File: File name.
-                                    - Ukuran: File size in megabytes.
-                                    - Format: File extension.
-                                    - Status: Processing status.
-                                    - Size Input: Input file size in megabytes.
-                                    - Size Output: Output file size in megabytes.
-                                -->
                                 <GridView>
-                                    <GridViewColumn Header="Nama File" Width="300"
+                                    <GridViewColumn Header="Nama File" Width="Auto"
                                                     DisplayMemberBinding="{Binding FileName}" />
-                                    <GridViewColumn Header="Ukuran" Width="100"
+                                    <GridViewColumn Header="Ukuran" Width="Auto"
                                                     DisplayMemberBinding="{Binding FileSize, StringFormat={}{0} MB}" />
-                                    <GridViewColumn Header="Format" Width="80"
+                                    <GridViewColumn Header="Format" Width="Auto"
                                                     DisplayMemberBinding="{Binding FileExtension}" />
-                                    <GridViewColumn Header="Status" Width="100" DisplayMemberBinding="{Binding Status}" />
-                                    <GridViewColumn Header="Size Input" Width="80"
-                                                    DisplayMemberBinding="{Binding InputFileSize, StringFormat={}{0} MB}" />
-                                    <GridViewColumn Header="Size Output" Width="80"
-                                                    DisplayMemberBinding="{Binding OutputFileSize, StringFormat={}{0} MB}" />
+                                    <GridViewColumn Header="Status" Width="Auto" DisplayMemberBinding="{Binding Status}" />
                                 </GridView>
                             </ListView.View>
                         </ListView>
-                    </Grid>
-                </GroupBox>
+                    </GroupBox>
 
-                <!-- Output Settings -->
-                <GroupBox Grid.Row="2" Header="Pengaturan Output" Margin="0,0,0,10">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
+                    <!-- Output Settings -->
+                    <GroupBox Grid.Column="1" Header="Pengaturan Output" Margin="5">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
 
-                        <Label Grid.Row="0" Grid.Column="0" Content="Format Output:" Margin="5" />
-                        <ComboBox x:Name="OutputFormatComboBox" Grid.Row="0" Grid.Column="1" Margin="5" Width="150"
-                                  HorizontalAlignment="Left">
-                            <ComboBoxItem Content="MP4" IsSelected="True" />
-                            <ComboBoxItem Content="AVI" />
-                            <ComboBoxItem Content="MKV" />
-                            <ComboBoxItem Content="MOV" />
-                            <ComboBoxItem Content="WMV" />
-                            <ComboBoxItem Content="WebM" />
-                            <ComboBoxItem Content="FLV" />
-                            <ComboBoxItem Content="M4V" />
-                            <ComboBoxItem Content="3GP" />
-                            <ComboBoxItem Content="VOB" />
-                            <ComboBoxItem Content="TS" />
-                            <ComboBoxItem Content="M2TS" />
-                            <ComboBoxItem Content="MTS" />
-                            <ComboBoxItem Content="OGV" />
-                            <ComboBoxItem Content="ASF" />
-                            <ComboBoxItem Content="F4V" />
-                            <ComboBoxItem Content="RM" />
-                            <ComboBoxItem Content="RMVB" />
-                            <ComboBoxItem Content="DIVX" />
-                            <ComboBoxItem Content="MPG" />
-                            <ComboBoxItem Content="MPEG" />
-                        </ComboBox>
+                            <Label Grid.Row="0" Grid.Column="0" Content="Format Output:" Margin="5" />
+                            <ComboBox x:Name="OutputFormatComboBox" Grid.Row="0" Grid.Column="1" Margin="5">
+                                <ComboBoxItem Content="MP4" IsSelected="True" />
+                                <ComboBoxItem Content="AVI" />
+                                <ComboBoxItem Content="MKV" />
+                                <ComboBoxItem Content="MOV" />
+                                <ComboBoxItem Content="WMV" />
+                                <ComboBoxItem Content="WebM" />
+                                <ComboBoxItem Content="FLV" />
+                                <ComboBoxItem Content="M4V" />
+                                <ComboBoxItem Content="3GP" />
+                                <ComboBoxItem Content="VOB" />
+                                <ComboBoxItem Content="TS" />
+                                <ComboBoxItem Content="M2TS" />
+                                <ComboBoxItem Content="MTS" />
+                                <ComboBoxItem Content="OGV" />
+                                <ComboBoxItem Content="ASF" />
+                                <ComboBoxItem Content="F4V" />
+                                <ComboBoxItem Content="RM" />
+                                <ComboBoxItem Content="RMVB" />
+                                <ComboBoxItem Content="DIVX" />
+                                <ComboBoxItem Content="MPG" />
+                                <ComboBoxItem Content="MPEG" />
+                            </ComboBox>
 
-                        <Label Grid.Row="0" Grid.Column="2" Content="Kualitas Video:" Margin="5" />
-                        <ComboBox x:Name="QualityComboBox" Grid.Row="0" Grid.Column="3" Margin="5" Width="150"
-                                  HorizontalAlignment="Left">
-                            <ComboBoxItem Content="Tinggi (HD)" IsSelected="True" />
-                            <ComboBoxItem Content="Standar (SD)" />
-                            <ComboBoxItem Content="Rendah (Mobile)" />
-                        </ComboBox>
+                            <Label Grid.Row="1" Grid.Column="0" Content="Kualitas Video:" Margin="5" />
+                            <ComboBox x:Name="QualityComboBox" Grid.Row="1" Grid.Column="1" Margin="5">
+                                <ComboBoxItem Content="Tinggi (HD)" IsSelected="True" />
+                                <ComboBoxItem Content="Standar (SD)" />
+                                <ComboBoxItem Content="Rendah (Mobile)" />
+                            </ComboBox>
 
-                        <Label Grid.Row="1" Grid.Column="0" Content="Folder Tujuan:" Margin="5" />
-                        <TextBox x:Name="OutputFolderTextBox" Grid.Row="1" Grid.Column="1" Margin="5" IsReadOnly="True" />
-                        <Button x:Name="BrowseFolderButton" Grid.Row="1" Grid.Column="2" Content="Pilih Folder..."
-                                Margin="5,5" Padding="10,0" Click="BrowseFolderButton_Click" />
-                    </Grid>
-                </GroupBox>
+                            <Label Grid.Row="2" Grid.Column="0" Content="Folder Tujuan:" Margin="5" />
+                            <TextBox x:Name="OutputFolderTextBox" Grid.Row="2" Grid.Column="1" Margin="5" IsReadOnly="True" />
+                            <Button x:Name="BrowseFolderButton" Grid.Row="2" Grid.Column="2" Content="Pilih..."
+                                    Margin="5" Padding="10,0" Click="BrowseFolderButton_Click" />
+                        </Grid>
+                    </GroupBox>
+                </Grid>
 
                 <!-- Progress -->
-                <Grid Grid.Row="3" Margin="0,0,0,10">
+                <Grid Grid.Row="2" Margin="0,10,0,10">
                     <ProgressBar x:Name="ConversionProgress" Height="20" Minimum="0" Maximum="100" Value="0" />
                     <TextBlock x:Name="StatusText" Text="Siap" HorizontalAlignment="Center" VerticalAlignment="Center" />
                 </Grid>
 
                 <!-- Action Buttons -->
-                <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right">
+                <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right">
                     <Button x:Name="AddFilesButton" Content="Tambah File" Margin="0,0,10,0" Padding="15,5"
                             Click="AddFilesButton_Click" />
                     <Button x:Name="ConvertButton" Content="Konversi" Margin="0,0,10,0" Padding="15,5"
                             Click="ConvertButton_Click" />
                     <Button x:Name="CancelButton" Content="Batal" Margin="0,0,10,0" Padding="15,5"
                             Click="CancelButton_Click" IsEnabled="False" />
-                    <Button x:Name="ClearButton" Content="Bersihkan" Margin="0,0,10,0" Padding="15,5" Click="ClearButton_Click" />
+                    <Button x:Name="ClearButton" Content="Bersihkan" Margin="0,0,10,0" Padding="15,5" Click="ClearButton_Click" FontWeight="Bold" />
                 </StackPanel>
             </Grid>
         </TabItem>
@@ -170,6 +162,9 @@
         <TabItem Header="Tentang">
             <ScrollViewer VerticalScrollBarVisibility="Auto">
                 <Grid Margin="20">
+                    <Grid.Background>
+                        <ImageBrush ImageSource="/Ox.png" Opacity="0.1"/>
+                    </Grid.Background>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
@@ -180,15 +175,15 @@
                     <!-- Header dengan Logo -->
                     <StackPanel Grid.Row="0" HorizontalAlignment="Center" Margin="0,0,0,30">
                         <TextBlock Text="OXVIDCO"
-                                   FontSize="32"
+                                   FontSize="36"
                                    FontWeight="SemiBold"
                                    Foreground="#2196F3"
-                                   HorizontalAlignment="Center" />
+                                   HorizontalAlignment="Center" FontFamily="Alien Encounters" />
                         <TextBlock Text="Video Converter"
                                    FontSize="14"
                                    Foreground="#666"
                                    HorizontalAlignment="Center" />
-                        <TextBlock Text="v1.0.1"
+                        <TextBlock Text="v1.0.2"
                                    FontSize="12"
                                    Foreground="#999"
                                    HorizontalAlignment="Center"
@@ -244,14 +239,14 @@
                                    FontSize="18"
                                    FontWeight="SemiBold"
                                    Margin="0,20,0,15" />
-                        
+
                         <StackPanel Margin="0,0,0,20">
                             <TextBlock Text="Pengembang Utama"
                                        FontWeight="SemiBold"
                                        Margin="0,0,0,5" />
                             <TextBlock Text="• 0xniel FT Azalea2n - Pengembang Utama"
                                        Margin="15,0,0,5" />
-                            
+
                             <TextBlock Text="Libraries &amp; Framework"
                                        FontWeight="SemiBold"
                                        Margin="0,15,0,5" />
@@ -263,7 +258,7 @@
                                        Margin="15,0,0,2" />
                             <TextBlock Text="• HtmlAgilityPack - Parser HTML"
                                        Margin="15,0,0,2" />
-                                       
+
                             <TextBlock Text="Desain &amp; Ikon"
                                        FontWeight="SemiBold"
                                        Margin="0,15,0,5" />
@@ -272,7 +267,7 @@
                             <TextBlock Text="• Fluent UI - Komponen antarmuka"
                                        Margin="15,0,0,2" />
                         </StackPanel>
-                        
+
                         <TextBlock Text="Hak Cipta © 2025 0xniel FT Azalea2n. Semua hak dilindungi."
                                    FontSize="12"
                                    Foreground="#666"
@@ -365,9 +360,9 @@
                                     BorderThickness="0 1px 0 0"
                                     Padding="16">
                                 <ScrollViewer VerticalScrollBarVisibility="Auto"
-                                              Padding="0 8px">
+                                              Padding="0 8px" Height="359" Margin="-6,0,-6,0">
                                     <ItemsControl ItemsSource="{Binding BasicHelpItems}"
-                                                  ItemContainerStyle="{StaticResource CardItemStyle}">
+                                                  ItemContainerStyle="{StaticResource CardItemStyle}" Width="801">
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate DataType="models:HelpItem">
                                                 <Border Style="{StaticResource CardStyle}">

@@ -1,7 +1,5 @@
 {
-  "version": "1.0.2",
-  "downloadUrl": "https://drive.google.com/uc?export=download&id=FILE_ID_INSTALLER",
-  "changelog": "Pembaruan versi 1.0.2\n- Pembaruan versi proyek",
-  "isMandatory": false,
-  "releaseDate": "2025-09-05T10:10:00+07:00"
+  "Version": "1.1.0",
+  "Changelog": "- Rilis awal dengan installer.\n- Perbaikan bug dan peningkatan stabilitas.",
+  "DownloadUrl": "https://drive.google.com/uc?export=download&id=12J-Hf0Zb1xjjd0L3TyOrH6I7s_rFaG47"
 }

@@ -16,7 +16,7 @@ namespace OxVidco.Services
     public class UpdateService
     {
         // Ganti dengan ID file update.json di Google Drive
-        private const string UpdateFileId = "YOUR_GOOGLE_DRIVE_FILE_ID";
+        private const string UpdateFileId = "1sg0FzqUBDk4ZOqrzd2wRa-DiMZpkqP8y";
         private const string UpdateUrl = $"https://drive.google.com/uc?export=download&id={UpdateFileId}";
         private readonly HttpClient _httpClient;
         private readonly CookieContainer _cookies = new CookieContainer();
@@ -47,12 +47,14 @@ namespace OxVidco.Services
                     if (!string.IsNullOrEmpty(json))
                     {
                         var updateInfo = JsonConvert.DeserializeObject<UpdateInfo>(json);
-                        return updateInfo?.Version != null && updateInfo.Version > currentVersion ? updateInfo : null;
+                        if (updateInfo?.Version != null && updateInfo.Version > currentVersion)
+                        {
+                            return updateInfo;
+                        }
                     }
                 }
 
-                // Jika tidak ada file lokal, coba download dari Google Drive
-                // Hanya jika UpdateFileId sudah diatur dengan benar
+                // Jika tidak ada file lokal, atau versi lokal tidak lebih baru, coba download dari Google Drive
                 if (!string.IsNullOrEmpty(UpdateFileId) && UpdateFileId != "YOUR_GOOGLE_DRIVE_FILE_ID")
                 {
                     try 
@@ -61,7 +63,10 @@ namespace OxVidco.Services
                         if (!string.IsNullOrEmpty(json))
                         {
                             var updateInfo = JsonConvert.DeserializeObject<UpdateInfo>(json);
-                            return updateInfo?.Version != null && updateInfo.Version > currentVersion ? updateInfo : null;
+                            if (updateInfo?.Version != null && updateInfo.Version > currentVersion)
+                            {
+                                return updateInfo;
+                            }
                         }
                     }
                     catch (Exception ex)
@@ -70,7 +75,7 @@ namespace OxVidco.Services
                     }
                 }
 
-                return null;
+                return null; // Tidak ada pembaruan yang ditemukan
             }
             catch (Exception ex)
             {
@@ -95,17 +100,14 @@ namespace OxVidco.Services
                 var doc = new HtmlDocument();
                 doc.LoadHtml(content);
                 var form = doc.DocumentNode.SelectSingleNode("//form[@id='download-form']");
-                if (true)
+                if (form != null)
                 {
                     var action = form.GetAttributeValue("action", "");
                     if (!string.IsNullOrEmpty(action))
                     {
-                        // Dapatkan cookies dari response sebelumnya
-                        var cookies = _handler.CookieContainer.GetCookies(new Uri("https://drive.google.com"));
+                        var confirmationUrl = new Uri(new Uri("https://drive.google.com"), action).ToString();
                         
-                        // Buat request baru dengan cookies
-                        using var request = new HttpRequestMessage(HttpMethod.Get, action);
-                        request.Headers.Add("Cookie", string.Join("; ", cookies.Select(c => $"{c.Name}={c.Value}")));
+                        using var request = new HttpRequestMessage(HttpMethod.Get, confirmationUrl);
                         
                         using var newResponse = await _httpClient.SendAsync(request);
                         newResponse.EnsureSuccessStatusCode();

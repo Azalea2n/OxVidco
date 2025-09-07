@@ -32,17 +32,24 @@ Rilis v1.0.1:
         - Perbaikan dependensi eksternal
         
 Rilis v1.0.2:
-        - Pembaruan versi proyek</PackageReleaseNotes>
+        - Pembaruan versi proyek
+
+Rilis v1.1.0:
+        - Penambahan dukungan format video tambahan (WebM, FLV, M4V, 3GP)
+        - Perbaikan manajemen file FFmpeg
+        - Penyempurnaan antarmuka pengguna
+        - Peningkatan sistem pembaruan</PackageReleaseNotes>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageIcon>Ox.png</PackageIcon>
-        <Version>1.0.2</Version>
+        <Version>1.1.0</Version>
         <RepositoryUrl>https://github.com/Azalea2n/OxVidco</RepositoryUrl>
         <Company>0xCo</Company>
-        <AssemblyVersion>1.0.2.0</AssemblyVersion>
-        <FileVersion>1.0.2.0</FileVersion>
+        <AssemblyVersion>1.1.0.0</AssemblyVersion>
+        <FileVersion>1.1.0.0</FileVersion>
         <SignAssembly>true</SignAssembly>
         <AssemblyOriginatorKeyFile>oxvidco.snk</AssemblyOriginatorKeyFile>
+        <Platforms>AnyCPU;x64</Platforms>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -56,14 +63,25 @@ Rilis v1.0.2:
         <DebugSymbols>false</DebugSymbols>
         <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
     </PropertyGroup>
+    <ItemGroup>
+      <Compile Remove="Installer\**" />
+      <Compile Remove="Output\**" />
+      <Compile Remove="Themes\**" />
+      <EmbeddedResource Remove="Installer\**" />
+      <EmbeddedResource Remove="Output\**" />
+      <EmbeddedResource Remove="Themes\**" />
+      <None Remove="Installer\**" />
+      <None Remove="Output\**" />
+      <None Remove="Themes\**" />
+      <Page Remove="Installer\**" />
+      <Page Remove="Output\**" />
+      <Page Remove="Themes\**" />
+    </ItemGroup>
 
     <ItemGroup>
         <FrameworkReference Include="Microsoft.WindowsDesktop.App.WindowsForms" />
-        <None Include="Ox.png">
-            <Pack>True</Pack>
-            <PackagePath>\</PackagePath>
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
+        <None Include="bin\Release\net9.0-windows\Ox.ico" />
+        <None Include="Ox.png" Pack="true" PackagePath="" />
         <None Include="README.md" Pack="true" PackagePath="\">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
@@ -73,9 +91,7 @@ Rilis v1.0.2:
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Installer\" />
       <Folder Include="Resources\Images\" />
-      <Folder Include="Themes\" />
     </ItemGroup>
 
     <ItemGroup>
@@ -91,13 +107,16 @@ Rilis v1.0.2:
       <Content Update="Resources\Ox.ico">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Content>
+      <None Remove="C.jpeg" />
       <None Remove="Resources\Ox.png" />
-      <Content Update="Ox.png">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
       <Content Include="update.json">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Resource Include="C.jpeg" />
+      <Resource Include="Ox.png" />
     </ItemGroup>
 
     <!-- Hapus folder x64 yang tidak diperlukan -->
@@ -113,28 +132,12 @@ Rilis v1.0.2:
         <MakeDir Directories="$(OutDir)ffmpeg\x64" />
         
         <!-- Salin file-file FFmpeg -->
-        <Copy SourceFiles="$(ProjectDir)ffmpeg\x64\ffmpeg.exe" 
-              DestinationFolder="$(OutDir)ffmpeg\x64" 
-              SkipUnchangedFiles="true"
-              OverwriteReadOnlyFiles="true"
-              Retries="3"
-              RetryDelayMilliseconds="1000" />
+        <Copy SourceFiles="$(ProjectDir)ffmpeg\x64\ffmpeg.exe" DestinationFolder="$(OutDir)ffmpeg\x64" SkipUnchangedFiles="true" OverwriteReadOnlyFiles="true" Retries="3" RetryDelayMilliseconds="1000" />
               
         <!-- Hanya salin ffplay.exe jika ada di direktori sumber -->
-        <Copy SourceFiles="$(ProjectDir)ffmpeg\x64\ffplay.exe" 
-              DestinationFolder="$(OutDir)ffmpeg\x64" 
-              SkipUnchangedFiles="true"
-              OverwriteReadOnlyFiles="true"
-              Retries="3"
-              RetryDelayMilliseconds="1000"
-              Condition="Exists('$(ProjectDir)ffmpeg\x64\ffplay.exe')" />
+        <Copy SourceFiles="$(ProjectDir)ffmpeg\x64\ffplay.exe" DestinationFolder="$(OutDir)ffmpeg\x64" SkipUnchangedFiles="true" OverwriteReadOnlyFiles="true" Retries="3" RetryDelayMilliseconds="1000" Condition="Exists('$(ProjectDir)ffmpeg\x64\ffplay.exe')" />
               
-        <Copy SourceFiles="$(ProjectDir)ffmpeg\x64\ffprobe.exe" 
-              DestinationFolder="$(OutDir)ffmpeg\x64" 
-              SkipUnchangedFiles="true"
-              OverwriteReadOnlyFiles="true"
-              Retries="3"
-              RetryDelayMilliseconds="1000" />
+        <Copy SourceFiles="$(ProjectDir)ffmpeg\x64\ffprobe.exe" DestinationFolder="$(OutDir)ffmpeg\x64" SkipUnchangedFiles="true" OverwriteReadOnlyFiles="true" Retries="3" RetryDelayMilliseconds="1000" />
               
         <Message Importance="high" Text="File FFmpeg berhasil disalin ke: $(OutDir)ffmpeg\x64\" />
     </Target>
@@ -143,16 +146,14 @@ Rilis v1.0.2:
         <ItemGroup>
             <NewtonsoftJsonFile Include="$(UserProfile)\.nuget\packages\newtonsoft.json\13.0.3\lib\**\Newtonsoft.Json.dll" />
         </ItemGroup>
-        <Copy SourceFiles="@(NewtonsoftJsonFile)" 
-              DestinationFolder="$(OutDir)" />
+        <Copy SourceFiles="@(NewtonsoftJsonFile)" DestinationFolder="$(OutDir)" />
     </Target>
 
     <Target Name="CopyHtmlAgilityPack" AfterTargets="Build">
         <ItemGroup>
             <HtmlAgilityPackFile Include="$(UserProfile)\.nuget\packages\htmlagilitypack\1.12.2\lib\netstandard2.0\HtmlAgilityPack.dll" />
         </ItemGroup>
-        <Copy SourceFiles="@(HtmlAgilityPackFile)" 
-              DestinationFolder="$(OutDir)" />
+        <Copy SourceFiles="@(HtmlAgilityPackFile)" DestinationFolder="$(OutDir)" />
     </Target>
 
 </Project>

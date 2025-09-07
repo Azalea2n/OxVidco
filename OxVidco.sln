@@ -1,16 +1,46 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36414.22
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OxVidco", "OxVidco.csproj", "{1A0B70FE-059D-4426-82FA-6572B2163473}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "OxVidco.Setup", "..\OxVidco.Setup\OxVidco.Setup.vdproj", "{F8EC60E1-CCA0-6C8D-BA11-1D17F18A3537}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
 		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+		Releaseox|Any CPU = Releaseox|Any CPU
+		Releaseox|x64 = Releaseox|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{1A0B70FE-059D-4426-82FA-6572B2163473}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1A0B70FE-059D-4426-82FA-6572B2163473}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A0B70FE-059D-4426-82FA-6572B2163473}.Debug|x64.ActiveCfg = Debug|x64
+		{1A0B70FE-059D-4426-82FA-6572B2163473}.Debug|x64.Build.0 = Debug|x64
 		{1A0B70FE-059D-4426-82FA-6572B2163473}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1A0B70FE-059D-4426-82FA-6572B2163473}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A0B70FE-059D-4426-82FA-6572B2163473}.Release|x64.ActiveCfg = Release|x64
+		{1A0B70FE-059D-4426-82FA-6572B2163473}.Release|x64.Build.0 = Release|x64
+		{1A0B70FE-059D-4426-82FA-6572B2163473}.Releaseox|Any CPU.ActiveCfg = Release|Any CPU
+		{1A0B70FE-059D-4426-82FA-6572B2163473}.Releaseox|Any CPU.Build.0 = Release|Any CPU
+		{1A0B70FE-059D-4426-82FA-6572B2163473}.Releaseox|x64.ActiveCfg = Release|x64
+		{1A0B70FE-059D-4426-82FA-6572B2163473}.Releaseox|x64.Build.0 = Release|x64
+		{F8EC60E1-CCA0-6C8D-BA11-1D17F18A3537}.Debug|Any CPU.ActiveCfg = Debug
+		{F8EC60E1-CCA0-6C8D-BA11-1D17F18A3537}.Debug|x64.ActiveCfg = Debug
+		{F8EC60E1-CCA0-6C8D-BA11-1D17F18A3537}.Debug|x64.Build.0 = Debug
+		{F8EC60E1-CCA0-6C8D-BA11-1D17F18A3537}.Release|Any CPU.ActiveCfg = Release
+		{F8EC60E1-CCA0-6C8D-BA11-1D17F18A3537}.Release|x64.ActiveCfg = Release
+		{F8EC60E1-CCA0-6C8D-BA11-1D17F18A3537}.Releaseox|Any CPU.ActiveCfg = Release
+		{F8EC60E1-CCA0-6C8D-BA11-1D17F18A3537}.Releaseox|x64.ActiveCfg = Release
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C8B2533B-065E-46C7-B7AD-8D83C467F155}
 	EndGlobalSection
 EndGlobal

@@ -12,6 +12,7 @@ namespace OxVidco.ViewModels
     {
         private readonly UpdateService _updateService;
         public ICommand CheckForUpdatesCommand { get; }
+        public ICommand DownloadUpdateCommand { get; }
 
         public string CurrentVersion => GetCurrentVersion();
 
@@ -39,6 +40,17 @@ namespace OxVidco.ViewModels
         }
 
         public bool CanCheckForUpdates => !IsCheckingForUpdates;
+
+        private bool _isDownloading;
+        public bool IsDownloading
+        {
+            get => _isDownloading;
+            set
+            {
+                _isDownloading = value;
+                OnPropertyChanged();
+            }
+        }
 
         private bool _isUpToDate;
         public bool IsUpToDate
@@ -83,6 +95,10 @@ namespace OxVidco.ViewModels
                 async _ => await CheckForUpdatesAsync(),
                 _ => !IsCheckingForUpdates
             );
+            DownloadUpdateCommand = new RelayCommand<object>(
+                async _ => await DownloadUpdateAsync(),
+                _ => HasUpdate && !IsDownloading
+            );
             StatusMessage = "Klik tombol di bawah untuk memeriksa pembaruan.";
         }
 
@@ -125,6 +141,35 @@ namespace OxVidco.ViewModels
             finally
             {
                 IsCheckingForUpdates = false;
+            }
+        }
+
+        private async Task DownloadUpdateAsync()
+        {
+            if (UpdateInfo?.DownloadUrl == null || string.IsNullOrWhiteSpace(UpdateInfo.DownloadUrl))
+            {
+                StatusMessage = "URL unduhan tidak valid.";
+                return;
+            }
+
+            IsDownloading = true;
+            StatusMessage = "Membuka tautan unduhan...";
+
+            try
+            {
+                // Buka URL di browser default
+                Process.Start(new ProcessStartInfo(UpdateInfo.DownloadUrl) { UseShellExecute = true });
+                StatusMessage = "Tautan unduhan telah dibuka di browser Anda.";
+                await Task.CompletedTask;
+            }
+            catch (Exception ex)
+            {
+                StatusMessage = $"Gagal membuka tautan unduhan: {ex.Message}";
+                Debug.WriteLine($"Error opening download link: {ex}");
+            }
+            finally
+            {
+                IsDownloading = false;
             }
         }
 

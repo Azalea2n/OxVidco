@@ -4,9 +4,7 @@ using System.IO;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
-using OxVidco.Commands;
 using OxVidco.Models;
-using Microsoft.Win32;
 using System.Windows.Forms;
 
 namespace OxVidco;
@@ -175,8 +173,8 @@ public static class FFmpegHelper
                 // M4V (H.264 + AAC) - Format iTunes
                 "m4v" => "-c:v libx264 -profile:v high -level 4.0 -pix_fmt yuv420p -c:a aac -f mp4 -movflags +faststart",
                 
-                // 3GP (H.264 + AMR-NB) - Format ponsel lama
-                "3gp" => "-c:v libx264 -profile:v baseline -level 1.3 -pix_fmt yuv420p -c:a libopencore_amrnb -ar 8000 -ab 12.2k",
+                // 3GP (H.264 + AAC) - Format ponsel lama yang lebih kompatibel
+                "3gp" => "-c:v libx264 -profile:v baseline -level 1.3 -pix_fmt yuv420p -c:a aac -f 3gp",
                 
                 // VOB (MPEG-2 + AC3) - Format DVD
                 "vob" => "-c:v mpeg2video -qscale:v 3 -c:a ac3 -b:a 192k -f vob -target ntsc-dvd",
@@ -193,18 +191,18 @@ public static class FFmpegHelper
                 // ASF (Windows Media)
                 "asf" => "-c:v wmv2 -b:v 2M -c:a wmav2 -b:a 192k -f asf",
                 
-                // F4V (H.264 + AAC) - Format Flash Video modern
-                "f4v" => "-c:v libx264 -profile:v high -level 4.0 -pix_fmt yuv420p -c:a aac -f flv",
+                // F4V (H.264 + AAC) - Format Flash Video modern (berbasis MP4)
+                "f4v" => "-c:v libx264 -profile:v high -level 4.0 -pix_fmt yuv420p -c:a aac -f mp4",
                 
-                // RM/RMVB (RealMedia) - Format RealPlayer
-                "rm" or "rmvb" => "-c:v libx264 -c:a libmp3lame -f flv", // RealMedia memerlukan codec khusus, ini alternatif
-                
-                // DIVX (MPEG-4 ASP)
-                "divx" => "-c:v mpeg4 -vtag xvid -qscale:v 3 -c:a libmp3lame -qscale:a 2",
+                // DIVX (MPEG-4 ASP in AVI container)
+                "divx" => "-c:v mpeg4 -vtag DIVX -qscale:v 3 -c:a libmp3lame -qscale:a 2 -f avi",
                 
                 // MPG/MPEG (MPEG-1/2)
                 "mpg" or "mpeg" => "-c:v mpeg2video -qscale:v 3 -c:a mp2 -f mpeg",
                 
+                // RM/RMVB tidak didukung secara native, akan dikonversi ke MP4 sebagai gantinya
+                "rm" or "rmvb" => "-c:v libx264 -profile:v high -level 4.0 -pix_fmt yuv420p -c:a aac -movflags +faststart",
+
                 // Default: Gunakan H.264 + AAC untuk format yang tidak dikenal
                 _ => "-c:v libx264 -profile:v high -level 4.0 -pix_fmt yuv420p -c:a aac -movflags +faststart"
             };
@@ -350,7 +348,6 @@ public partial class MainWindow : INotifyPropertyChanged
         OutputFolderTextBox.Text = _outputFolder;
 
         // Inisialisasi command
-        new RelayCommand<string>(SearchHelp);
 
         // Inisialisasi daftar fitur dan bantuan
         InitializeFeatureCards();
@@ -367,7 +364,7 @@ public partial class MainWindow : INotifyPropertyChanged
         var openFileDialog = new Microsoft.Win32.OpenFileDialog
         {
             Multiselect = true,
-            Filter = "File Video|*.mp4;*.avi;*.mkv;*.mov;*.wmv|Semua File|*.*",
+            Filter = "File Video|*.mp4;*.avi;*.mkv;*.mov;*.wmv;*.webm;*.flv;*.m4v;*.3gp;*.vob;*.ts;*.m2ts;*.mts;*.ogv;*.asf;*.f4v;*.rm;*.rmvb;*.divx;*.mpg;*.mpeg|Semua File|*.*",
             Title = "Pilih File Video"
         };
 
@@ -514,7 +511,6 @@ public partial class MainWindow : INotifyPropertyChanged
     private void InitializeHelpItems()
     {
         // Inisialisasi command
-        new RelayCommand<string>(SearchHelp);
 
         // Panduan Dasar
         _basicHelpItems.Add(new HelpItem
@@ -586,6 +582,7 @@ public partial class MainWindow : INotifyPropertyChanged
         });
     }
 
+/*
     private void SearchHelp(string searchText)
     {
         if (string.IsNullOrWhiteSpace(searchText))
@@ -615,6 +612,7 @@ public partial class MainWindow : INotifyPropertyChanged
             item.IsExpanded = item.Question.ToLower().Contains(searchQuery) ||
                               item.Answer.ToLower().Contains(searchQuery);
     }
+*/
 
     private void InitializeFeatureCards()
     {
@@ -675,5 +673,10 @@ public partial class MainWindow : INotifyPropertyChanged
             _cancellationTokenSource.Cancel();
             StatusText.Text = "Membatalkan...";
         }
+    }
+
+    private void VideoList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+
     }
 }
