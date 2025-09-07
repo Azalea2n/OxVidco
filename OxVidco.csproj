@@ -131,13 +131,35 @@ Rilis v1.1.0:
         <!-- Pastikan direktori tujuan ada -->
         <MakeDir Directories="$(OutDir)ffmpeg\x64" />
         
-        <!-- Salin file-file FFmpeg -->
-        <Copy SourceFiles="$(ProjectDir)ffmpeg\x64\ffmpeg.exe" DestinationFolder="$(OutDir)ffmpeg\x64" SkipUnchangedFiles="true" OverwriteReadOnlyFiles="true" Retries="3" RetryDelayMilliseconds="1000" />
+        <!-- Beri peringatan jika FFmpeg tidak ditemukan -->
+        <Warning Text="FFmpeg tidak ditemukan di $(ProjectDir)ffmpeg\x64\. Aplikasi membutuhkan FFmpeg untuk berfungsi dengan benar. Silakan unduh FFmpeg dan letakkan di folder tersebut." 
+                Condition="!Exists('$(ProjectDir)ffmpeg\x64\ffmpeg.exe')" />
+        
+        <!-- Salin file-file FFmpeg jika ada -->
+        <Copy SourceFiles="$(ProjectDir)ffmpeg\x64\ffmpeg.exe" 
+              DestinationFolder="$(OutDir)ffmpeg\x64" 
+              SkipUnchangedFiles="true" 
+              OverwriteReadOnlyFiles="true" 
+              Retries="3" 
+              RetryDelayMilliseconds="1000"
+              Condition="Exists('$(ProjectDir)ffmpeg\x64\ffmpeg.exe')" />
               
         <!-- Hanya salin ffplay.exe jika ada di direktori sumber -->
-        <Copy SourceFiles="$(ProjectDir)ffmpeg\x64\ffplay.exe" DestinationFolder="$(OutDir)ffmpeg\x64" SkipUnchangedFiles="true" OverwriteReadOnlyFiles="true" Retries="3" RetryDelayMilliseconds="1000" Condition="Exists('$(ProjectDir)ffmpeg\x64\ffplay.exe')" />
+        <Copy SourceFiles="$(ProjectDir)ffmpeg\x64\ffplay.exe" 
+              DestinationFolder="$(OutDir)ffmpeg\x64" 
+              SkipUnchangedFiles="true" 
+              OverwriteReadOnlyFiles="true" 
+              Retries="3" 
+              RetryDelayMilliseconds="1000" 
+              Condition="Exists('$(ProjectDir)ffmpeg\x64\ffplay.exe')" />
               
-        <Copy SourceFiles="$(ProjectDir)ffmpeg\x64\ffprobe.exe" DestinationFolder="$(OutDir)ffmpeg\x64" SkipUnchangedFiles="true" OverwriteReadOnlyFiles="true" Retries="3" RetryDelayMilliseconds="1000" />
+        <Copy SourceFiles="$(ProjectDir)ffmpeg\x64\ffprobe.exe" 
+              DestinationFolder="$(OutDir)ffmpeg\x64" 
+              SkipUnchangedFiles="true" 
+              OverwriteReadOnlyFiles="true" 
+              Retries="3" 
+              RetryDelayMilliseconds="1000"
+              Condition="Exists('$(ProjectDir)ffmpeg\x64\ffprobe.exe')" />
               
         <Message Importance="high" Text="File FFmpeg berhasil disalin ke: $(OutDir)ffmpeg\x64\" />
     </Target>
